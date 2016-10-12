@@ -158,7 +158,7 @@ void PrimeTower::generatePaths_denseInfill(const SliceDataStorage& storage)
 }
 
 
-void PrimeTower::addToGcode(const SliceDataStorage& storage, GCodePlanner& gcodeLayer, const GCodeExport& gcode, const int layer_nr, const int prev_extruder)
+void PrimeTower::addToGcode(const SliceDataStorage& storage, GCodePlanner& gcodeLayer, const GCodeExport& gcode, const int layer_nr, const int prev_extruder, const int new_extruder)
 {
     if (!( storage.max_object_height_second_to_last_extruder >= 0 && storage.getSettingInMicrons("prime_tower_size") > 0) )
     {
@@ -184,7 +184,7 @@ void PrimeTower::addToGcode(const SliceDataStorage& storage, GCodePlanner& gcode
     bool pre_wipe = storage.meshgroup->getExtruderTrain(new_extruder)->getSettingBoolean("dual_pre_wipe");
     bool post_wipe = storage.meshgroup->getExtruderTrain(prev_extruder)->getSettingBoolean("prime_tower_wipe_enabled");
 
-    if (prev_extruder == gcodeLayer.getExtruder())
+    if (prev_extruder == new_extruder)
     {
         pre_wipe = false;
         post_wipe = false;
@@ -195,7 +195,7 @@ void PrimeTower::addToGcode(const SliceDataStorage& storage, GCodePlanner& gcode
         preWipe(storage, gcodeLayer, new_extruder);
     }
 
-    addToGcode_denseInfill(storage, gcodeLayer, gcode, layer_nr, prev_extruder);
+    addToGcode_denseInfill(storage, gcodeLayer, gcode, layer_nr, prev_extruder, new_extruder);
 
     // post-wipe:
     if (post_wipe)
@@ -204,10 +204,8 @@ void PrimeTower::addToGcode(const SliceDataStorage& storage, GCodePlanner& gcode
     }
 }
 
-void PrimeTower::addToGcode_denseInfill(const SliceDataStorage& storage, GCodePlanner& gcodeLayer, const GCodeExport& gcode, const int layer_nr, const int prev_extruder)
+void PrimeTower::addToGcode_denseInfill(const SliceDataStorage& storage, GCodePlanner& gcodeLayer, const GCodeExport& gcode, const int layer_nr, const int prev_extruder, const int new_extruder)
 {
-    int new_extruder = gcodeLayer.getExtruder();
-
     Polygons& pattern = patterns_per_extruder[new_extruder][layer_nr % 2];
 
 
