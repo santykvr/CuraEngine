@@ -486,7 +486,8 @@ private:
      * \return A path with the given config which is now the last path in GCodePlanner::paths
      */
     GCodePath* getLatestPathWithConfig(GCodePathConfig* config, SpaceFillType space_fill_type, float flow = 1.0, bool spiralize = false);
-    
+
+public:
     /*!
      * Force GCodePlanner::getLatestPathWithConfig to return a new path.
      * 
@@ -498,7 +499,6 @@ private:
      * - when changing extruder, the same travel config is used, but its extruder field is changed.
      */
     void forceNewPathStart();
-public:
 
     /*!
      * Make the last path (if any) be z hopped.
@@ -584,7 +584,7 @@ public:
      * 
      * \param p The point to travel to
      */
-    void addTravel(Point p);
+    GCodePath& addTravel(Point p);
     
     /*!
      * Add a travel path to a certain point and retract if needed.
@@ -594,7 +594,7 @@ public:
      * \param p The point to travel to
      * \param path (optional) The travel path to which to add the point \p p
      */
-    void addTravel_simple(Point p, GCodePath* path = nullptr);
+    GCodePath& addTravel_simple(Point p, GCodePath* path = nullptr);
 
     /*!
      * Add an extrusion move to a certain point, optionally with a different flow than the one in the \p config.
