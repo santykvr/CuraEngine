@@ -705,6 +705,10 @@ void GCodePlanner::writeGCode(GCodeExport& gcode)
                 {
                     gcode.writeZhopStart(retraction_config.zHop);
                 }
+                else
+                {
+                    gcode.writeZhopEnd();
+                }
             }
             if (!path.config->isTravelPath() && last_extrusion_config != path.config)
             {
